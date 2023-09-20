@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Label Template</title>
+		<style>
+			.label {
+				width: 4in;
+				height: 6in;
+				border: 1px solid black;
+				margin: 0.5in;
+				padding: 0.25in;
+				float: left;
+			}
+			.label:not(:first-of-type) {
+				page-break-before: always;
+			}
+            @page {
+                size: 4in 6in;
+                margin: 0.5in;
+            }
+		</style>
+	</head>
+	<body>
+		<div id="label-content" class="label"><!--LABEL_CONTENT--></div>
+	</body>
+</html>

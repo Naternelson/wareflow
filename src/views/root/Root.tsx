@@ -1,12 +1,21 @@
-import { Outlet } from "react-router-dom";
+import { Box, Button } from "@mui/material";
+import MainNavigationBar from "../../components/navigation/main/MainNavigationBar";
 
 const RootView = () => {
     return (
-		<div>
-			<h1>Hello World This is the Root View</h1>
-            <Outlet/>
-		</div>
+		<Box>
+			<MainNavigationBar/>
+			<PrintButton labelText="Hello World!"/>
+		</Box>
 	);
+}
+
+const PrintButton = (props:{labelText:string}) => {
+	const handlePrint = () => {
+		console.log({window, require: window.electron})
+		window.electron.send("print-label", props.labelText);
+	}
+	return <Button onClick={handlePrint}>Print Label</Button>
 }
 
 export default RootView;

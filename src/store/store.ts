@@ -6,4 +6,6 @@ const store = configureStore({
 		root: rootReducer,
 	},
 });
+
+export type AppState = ReturnType<typeof store.getState>;
 export default store;

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { StrUtil } from "../../utiltity";
+import { AppState } from "../store";
 
 interface RootState {
 	organizationId: string | null;
@@ -9,7 +10,7 @@ interface RootState {
 
 const initialState: RootState = {
 	organizationId: null,
-	organizationName: "Organization Name",
+	organizationName: "Ogden Custom Solutions",
 	siteName: "WareFlow",
 };
 
@@ -29,3 +30,8 @@ const slice = createSlice({
 
 export const { updateOrganization } = slice.actions;
 export default slice.reducer;
+
+
+export const selectOrganizationId = (state: AppState) => state.root.organizationId;
+export const selectOrganizationName = (state: AppState) => state.root.organizationName;
+export const selectSiteName = (state: AppState) => state.root.siteName;
