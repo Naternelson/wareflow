@@ -2,6 +2,7 @@ import { KeyboardArrowDown } from "@mui/icons-material";
 import { Box, Menu, styled } from "@mui/material";
 import { ReactNode, useRef, useState } from "react";
 import { NavigateOptions, useNavigate } from "react-router-dom";
+import { shouldForwardProp } from "@mui/system";
 
 /**
  * `NavHeader` is a navigational header component. It supports both simple links and submenus.
@@ -29,16 +30,20 @@ const NavHeader = (props: NavHeaderProps) => {
 		}
 	};
 
-    const onArrowClickHandler = () => {
-        setMenuOpen(!menuOpen);
-    }
+	const onArrowClickHandler = () => {
+		setMenuOpen(!menuOpen);
+	};
 
 	return (
 		<>
 			<StyledContainer active={!!active} ref={ref}>
-				{icon}
-				<StyledLabel className="menu-label" onClick={onClickHandler}>{label}</StyledLabel>
-				{submenu && <StyledArrowIcon isOpen={menuOpen} fontSize="small" color="inherit" onClick={onArrowClickHandler} />}
+				<StyledClickable onClick={onClickHandler}>
+					{icon}
+					<StyledLabel className="menu-label">{label}</StyledLabel>
+				</StyledClickable>
+				{submenu && (
+					<StyledArrowIcon isOpen={menuOpen} fontSize="small" color="inherit" onClick={onArrowClickHandler} />
+				)}
 			</StyledContainer>
 			{submenu && (
 				<Menu
@@ -88,23 +93,41 @@ const StyledLabel = styled("span")(({ theme }) => ({
 /**
  * Styled container component for the entire header.
  */
-const StyledContainer = styled(Box)<{ active: boolean }>(({ theme, active }) => ({
+// const StyledContainer = styled(Box)<{ active: boolean }>(({ theme, active }) => ({
+
+// 	borderBottom: active ? `1px solid ${theme.palette.common.white}` : "1px solid rgba(0,0,0,0)",
+
+// }));
+const StyledContainer = styled(Box, {
+	shouldForwardProp: (prop) => shouldForwardProp(prop) && prop !== "active",
+})<{ active: boolean }>(({ theme, active }) => ({
 	display: "flex",
 	flexDirection: "row",
 	alignItems: "center",
 	gap: theme.spacing(1),
-	padding: ".1rem .3rem",
-	cursor: "default",
-	borderBottom: active ? `1px solid ${theme.palette.common.white}` : "1px solid rgba(0,0,0,0)",
+	padding: ".2rem .3rem",
+	borderBottom: `1px solid ${active ? theme.palette.common.white : "rgba(0,0,0,0)"}`,
 	transition: "color .1s ease-out",
 	"&:hover": {
 		color: theme.palette.primary.light,
-		borderBottom: `1px solid ${theme.palette.primary.main}`,
+		borderBottom: `1px solid ${active ? theme.palette.primary.light : "rgba(0,0,0,0)"}`,
 	},
 }));
 
-
-const StyledArrowIcon = styled(KeyboardArrowDown)<{ isOpen: boolean }>(({ isOpen }) => ({
+const StyledArrowIcon = styled(KeyboardArrowDown, {
+	shouldForwardProp: (prop) => shouldForwardProp(prop) && prop !== "isOpen",
+})<{ isOpen: boolean }>(({ isOpen }) => ({
 	transition: "transform 0.2s ease-out",
 	transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+	color: "white",
+	cursor: "pointer",
+}));
+
+const StyledClickable = styled(Box)(({ theme }) => ({
+	cursor: "pointer",
+	display: "flex",
+	flexDirection: "row",
+	alignItems: "center",
+	gap: theme.spacing(1),
+
 }));

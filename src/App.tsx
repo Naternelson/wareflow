@@ -7,13 +7,16 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./routing";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "./theme";
+import GlobalListeners from "./listeners/global";
 
 function App() {
 	return (
 		<Provider store={store}>
 			<ThemeProvider theme={theme}>
-				<CssBaseline/>
-				<RouterProvider router={router} />
+				<CssBaseline />
+				<GlobalListeners>
+					<RouterProvider router={router} />
+				</GlobalListeners>
 			</ThemeProvider>
 		</Provider>
 	);

@@ -1,12 +1,21 @@
-import { AppBar, Box, styled } from "@mui/material";
+import { AppBar, Box, MenuItem, MenuList, styled } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selectOrganizationName, selectSiteName } from "../../../store/root";
 import NavHeader from "../nav-header";
-import { AllInbox, Home } from "@mui/icons-material";
+import { AllInbox, Home, Widgets } from "@mui/icons-material";
+import { useLocation, useMatch } from "react-router-dom";
+import { useEffect } from "react";
 
 const MainNavigationBar = () => {
 	const siteTitle = useSelector(selectSiteName);
 	const siteOrganization = useSelector(selectOrganizationName);
+	const location = useLocation();
+	const homeActive = useMatch("/home");
+	const ordersActive = useMatch("/orders");
+	const productsActive = useMatch("/products");
+	useEffect(() => {
+		console.log({ homeActive, location: location.pathname });
+	}, [homeActive]);
 	return (
 		<AppBar position="sticky" color="secondary">
 			<StyledContainer>
@@ -15,13 +24,25 @@ const MainNavigationBar = () => {
 					<StyledOrganizationTitle>{siteOrganization}</StyledOrganizationTitle>
 				</StyledTitleLine>
 				<StyledMainMenus>
-					<NavHeader label={"Home"} active={true} linkTo={"/home"} icon={<Home fontSize="small" />} />
-					<NavHeader 
-                        label={"Orders"} 
-                        linkTo={"/orders"} 
-                        icon={<AllInbox fontSize="small" />} 
-                        submenu={<Box>Submenu</Box>}
-                    />
+					<NavHeader label={"Home"} active={!!homeActive} linkTo={"/home"} icon={<Home fontSize="small" />} />
+					<NavHeader
+						active={!!ordersActive}
+						label={"Orders"}
+						linkTo={"/orders"}
+						icon={<AllInbox fontSize="small" />}
+						submenu={<Box>Submenu</Box>}
+					/>
+					<NavHeader
+						active={!!productsActive}
+						label={"Products"}
+						linkTo={"/products"}
+						icon={<Widgets fontSize="small" />}
+						submenu={
+							<MenuList>
+								<MenuItem>Create New Product</MenuItem>
+							</MenuList>
+						}
+					/>
 				</StyledMainMenus>
 			</StyledContainer>
 		</AppBar>

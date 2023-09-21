@@ -1,21 +1,14 @@
-import { Box, Button } from "@mui/material";
-import MainNavigationBar from "../../components/navigation/main/MainNavigationBar";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const RootView = () => {
-    return (
-		<Box>
-			<MainNavigationBar/>
-			<PrintButton labelText="Hello World!"/>
-		</Box>
-	);
-}
+	const nav = useNavigate();
+	const location = useLocation()
+	useEffect(() => {
+		if(location.pathname === "/") nav("/home");
+	}, [nav, location.pathname]);
+	return <Outlet/>;
+};
 
-const PrintButton = (props:{labelText:string}) => {
-	const handlePrint = () => {
-		console.log({window, require: window.electron})
-		window.electron.send("print-label", props.labelText);
-	}
-	return <Button onClick={handlePrint}>Print Label</Button>
-}
 
 export default RootView;
