@@ -1,46 +1,41 @@
-# Getting Started with Create React App
+# WareFlow: Warehouse Management System (WMS) for Last-Stage Assembly
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+WareFlow is a specialized Windows desktop application designed to optimize businesses that focus on last-stage product assembly and packaging.
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+**WareFlow** was originally developed to cater to the specific needs of a valued client in the final stage of product assembly. However, its robust and versatile feature set makes it a top choice for any business in need of a comprehensive warehouse management solution.
 
-### `npm start`
+## Key Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. **Work Order Management**: Seamlessly create, track, and complete work orders.
+2. **Product Handling**: Manage inventory with ease, monitor stock levels, and track products throughout the assembly line.
+3. **Customizable Label Printing**: Advanced label printing capabilities with a wide range of customization options for local printers.
+4. **Simple Automations**: Reduce manual tasks and boost efficiency with built-in automation tools.
+5. **Printer Status Listener**: Stay informed with real-time monitoring of connected printers, ensuring quick solutions to potential issues like paper shortages or low ink levels.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Purchase and Installation
 
-### `npm test`
+1. WareFlow is available for purchase [here (link to purchase page)].
+2. Once purchased, download the latest release of WareFlow.
+3. Follow the on-screen instructions for installation.
+4. Launch WareFlow from the start menu or desktop shortcut after installation.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Usage
 
-### `npm run build`
+1. **Getting Started**: Upon launching WareFlow, log in with your credentials. First-time users should follow the setup wizard to configure the application properly.
+2. **Managing Work Orders**: Navigate to the "Work Orders" section to oversee your tasks.
+3. **Printing Labels**: Under the "Label Printing" segment, choose your preferred label design, modify settings as needed, and print.
+4. **Automations**: Access the "Automations" section to set up and control automated workflows tailored to your needs.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Support
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+For any queries, issues, or feedback, please reach out to our support team at [support@email.com].
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Contributing
 
-### `npm run eject`
+While WareFlow has a primary audience in mind, contributions are always welcomed. Should you have improvements or suggestions, kindly submit a pull request or open an issue.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## License
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+WareFlow is proprietary software, available for purchase and use by any interested party. All rights reserved.
