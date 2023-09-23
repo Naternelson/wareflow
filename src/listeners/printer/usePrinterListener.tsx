@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { PrinterMessage, removeMessage, updateMessage } from "../../store/printer";
-const { ipcRenderer } = window.require("electron");
+const  {ipcRenderer}  = window.require("electron")
 
 /**
  * A hook that listens to print status updates from the Electron main process.
@@ -12,8 +12,9 @@ const { ipcRenderer } = window.require("electron");
  */
 const usePrinterListener = () => {
 	const dispatch = useDispatch();
+
 	useEffect(() => {
-		ipcRenderer.on("print-status", (e: any, message: any) => {
+		const printStatusCallback = (message: any) => {
 			if (!isPrinterMessage(message)) return console.error("Invalid message from printer", message);
 			const { status, id } = message;
 			if (status === "success")
@@ -21,9 +22,14 @@ const usePrinterListener = () => {
 					dispatch(removeMessage(id));
 				}, 1000);
 			else dispatch(updateMessage(message));
-		});
+		};
+
+		// Register the listener and get the actual function used
+		const actualListenerFunc = ipcRenderer.on("print-status", printStatusCallback);
+
 		return () => {
-			ipcRenderer.removeAllListeners("print-status");
+			// Use the remove listener function for cleanup
+			ipcRenderer.off("print-status", actualListenerFunc);
 		};
 	}, [dispatch]);
 };

@@ -29,10 +29,11 @@
 	},
 	"scripts": {
 		"start-react": "cross-env BROWSER=none react-scripts start",
-		"start": "concurrently \"npm run start-react\" \"wait-on http://localhost:3000 && ts-node electron.ts\"",
+		"start": "electron .",
 		"build": "react-scripts build",
 		"eject": "react-scripts eject",
-		"electron-pack": "electron-builder build --win --mac --linux"
+		"electron-pack": "electron-builder build --win --mac --linux",
+		"electron-dev": "concurrently \"npm run start-react\" \"wait-on http://localhost:3000 && electron .\""
 	},
 	"build": {
 		"appId": "com.example.mynewapp",

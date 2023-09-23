@@ -1,3 +1,5 @@
+//electron.ts
+
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
@@ -29,30 +31,30 @@ function createWindow() {
 	mainWindow.on("closed", () => (mainWindow = null));
 }
 
-function printLabel(labelText: string, event: any, options = {}) {
-	const printWindow = new BrowserWindow({ show: false });
-	printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURI("<div>" + labelText + "</div>")}`);
-	console.log(encodeURI("<div>" + labelText + "</div>"));
-	printWindow.webContents.on("did-finish-load", () => {
-		const printers = mainWindow.webContents.getPrinters();
-		const defaultPrinter = printers.find((printer) => printer.isDefault);
-		const uid = uuidv4();
-		event.sender.send("print-status", {status: "pending", printer: defaultPrinter.name, id: uid})
-		printWindow.webContents.print(options, (success, errorType) => {
-			if(success) event.sender.send("print-status", {status: "success", printer: defaultPrinter.name, id: uid})
-			else event.sender.send("print-status", {status: "error", errorType, printer: defaultPrinter.name, id: uid})
-			printWindow.close();
-		});
-	});
-}
+// function printLabel(labelText: string, event: any, options = {}) {
+// 	const printWindow = new BrowserWindow({ show: false });
+// 	printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURI("<div>" + labelText + "</div>")}`);
+// 	console.log(encodeURI("<div>" + labelText + "</div>"));
+// 	printWindow.webContents.on("did-finish-load", () => {
+// 		const printers = mainWindow.webContents.getPrinters();
+// 		// const defaultPrinter = printers.find((printer) => printer.isDefault);
+// 		const uid = uuidv4();
+// 		event.sender.send("print-status", {status: "pending", printer: defaultPrinter.name, id: uid})
+// 		printWindow.webContents.print(options, (success, errorType) => {
+// 			if(success) event.sender.send("print-status", {status: "success", printer: defaultPrinter.name, id: uid})
+// 			else event.sender.send("print-status", {status: "error", errorType, printer: defaultPrinter.name, id: uid})
+// 			printWindow.close();
+// 		});
+// 	});
+// }
 
 ipcMain.on("print-label", (event, labelText) => {
-	printLabel(labelText, event);
+	// printLabel(labelText, event);
 });
 
 ipcMain.on("print-label-auto", (event, labelText) => {
 	console.log("print", { labelText });
-	printLabel(labelText, event);
+	// printLabel(labelText, event);
 });
 
 app.on("ready", createWindow);
