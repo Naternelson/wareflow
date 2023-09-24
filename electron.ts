@@ -1,61 +1,28 @@
-//electron.ts
+import { app, BrowserWindow, ipcMain } from "electron";
+import path from "path";
+import isDev from "electron-is-dev";
+import fs from "fs";
+import child_process from "child_process";
 
-const { app, BrowserWindow, ipcMain } = require("electron");
-const path = require("path");
-const isDev = require("electron-is-dev");
-const { v4: uuidv4 } = require("uuid");
-
-let mainWindow;
+let mainWindow:BrowserWindow | null;
 
 function createWindow() {
 	mainWindow = new BrowserWindow({
-		width: 900,
-		height: 680,
-		show: false,
+		width: 800,
+		height: 600,
 		webPreferences: {
+			nodeIntegration: false,
 			contextIsolation: true,
-			preload: path.join(app.getAppPath(), "public", "preload.js"),
+			preload: path.join(__dirname, "public", "preload.js"),
 		},
 	});
-	mainWindow.once("ready-to-show", () => {
-		mainWindow.maximize();
-		mainWindow.show();
+	mainWindow.maximize();
+	mainWindow.loadURL(isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "public", "index.html")}`);
+
+	mainWindow.on("closed", () => {
+		mainWindow = null;
 	});
-
-	mainWindow.loadURL(isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`);
-
-	if (isDev) {
-		mainWindow.webContents.openDevTools();
-	}
-
-	mainWindow.on("closed", () => (mainWindow = null));
 }
-
-// function printLabel(labelText: string, event: any, options = {}) {
-// 	const printWindow = new BrowserWindow({ show: false });
-// 	printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURI("<div>" + labelText + "</div>")}`);
-// 	console.log(encodeURI("<div>" + labelText + "</div>"));
-// 	printWindow.webContents.on("did-finish-load", () => {
-// 		const printers = mainWindow.webContents.getPrinters();
-// 		// const defaultPrinter = printers.find((printer) => printer.isDefault);
-// 		const uid = uuidv4();
-// 		event.sender.send("print-status", {status: "pending", printer: defaultPrinter.name, id: uid})
-// 		printWindow.webContents.print(options, (success, errorType) => {
-// 			if(success) event.sender.send("print-status", {status: "success", printer: defaultPrinter.name, id: uid})
-// 			else event.sender.send("print-status", {status: "error", errorType, printer: defaultPrinter.name, id: uid})
-// 			printWindow.close();
-// 		});
-// 	});
-// }
-
-ipcMain.on("print-label", (event, labelText) => {
-	// printLabel(labelText, event);
-});
-
-ipcMain.on("print-label-auto", (event, labelText) => {
-	console.log("print", { labelText });
-	// printLabel(labelText, event);
-});
 
 app.on("ready", createWindow);
 
@@ -70,3 +37,39 @@ app.on("activate", () => {
 		createWindow();
 	}
 });
+
+ipcMain.on("print-label", (event, labelText) => {
+	printLabel(labelText, true);
+});
+
+ipcMain.on("print-label-auto", (event, labelText) => {
+	printLabel(labelText, false);
+});
+
+/**
+ * Prints the given label text.
+ *
+ * @param labelText - Text to print.
+ * @param showDialog - Whether or not to show the print dialog.
+ */
+function printLabel(labelText: string, showDialog: boolean) {
+	const tempPath = path.join(__dirname, "temp_print.txt");
+
+	fs.writeFileSync(tempPath, labelText);
+
+	if (showDialog) {
+		// The "/p" flag will open the print dialog
+		child_process.exec(`notepad /p ${tempPath}`);
+	} else {
+		// Silently print with the default printer
+		child_process.exec(`print /d:"<Your Printer Name>" ${tempPath}`, (error, stdout, stderr) => {
+			if (error) {
+				console.error(`print error: ${error.message}`);
+				return;
+			}
+		});
+	}
+
+	// Optionally, clean up the temporary file after printing (you might want to delay this or check if the printing was successful)
+	fs.unlinkSync(tempPath);
+}

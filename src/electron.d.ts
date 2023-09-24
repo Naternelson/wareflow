@@ -1,10 +1,11 @@
-// in a declarations.d.ts file or similar
 declare global {
-  interface Window {
-    electron: {
-      send: (channel: string, ...args: any[]) => void;
-      on: (channel: string, func: (...args: any[]) => void) => (...args: any[]) => void;
-      off: (channel: string, func: (...args: any[]) => void) => void;
-    };
-  }
+	interface Window {
+		electron: {
+			send: (channel: string, data: any) => void;
+			on: (channel: string, func: any) => () => void; // Notice the new return type
+			invoke: (channel: string, data: any) => Promise<any>;
+		};
+	}
 }
+
+export {}; // Ensure module-like behavior

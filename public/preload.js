@@ -1,14 +1,12 @@
-const { contextBridge, ipcRenderer } = require("electron");
+const { ipcRenderer, contextBridge } = require("electron");
 
 contextBridge.exposeInMainWorld("electron", {
 	send: ipcRenderer.send,
 	on: (channel, func) => {
-		// Deliberately strip event as it includes `sender`
-		const newFunc = (event, ...args) => func(...args);
-		ipcRenderer.on(channel, newFunc);
-		return newFunc; // Return the newly created function
+		const wrappedFunc = (event, ...args) => func(...args);
+		ipcRenderer.on(channel, wrappedFunc);
+		// Return a cleanup function
+		return () => ipcRenderer.removeListener(channel, wrappedFunc);
 	},
-	off: (channel, func) => {
-		ipcRenderer.removeListener(channel, func);
-	},
+	invoke: ipcRenderer.invoke,
 });
