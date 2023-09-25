@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import { ErrorView, HomeView, RootView } from "../views";
 import Protected from "../views/protected";
+import {ProductOverviewView} from "../views/products";
 
 const router = createBrowserRouter([
 	{
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
 					},
 					{
 						path: "products",
-						element: <div>Products</div>,
+						element: <ProductOverviewView/>,
 					},
 				],
 			},
