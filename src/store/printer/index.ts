@@ -5,6 +5,7 @@ export interface PrinterMessage {
     id: string, 
     status: "pending" | "success" | "error",
     printer: string,
+    image?: string,
     errorType?: string
 }
 
