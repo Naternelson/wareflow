@@ -53,7 +53,6 @@ const StyledColumn = styled(({ grow, align, ...otherProps }: {grow?: boolean, al
 	display: "flex",
 	flexDirection: "column",
 	alignItems: align === "right" ? "flex-end" : "flex-start",
-	gap: ".25rem",
 	flex: grow ? 1 : "unset",
     
 }));
@@ -71,4 +70,5 @@ const StyledList = styled(List)({
     gap: "2px",
     display: "flex",
     flexDirection: "column",
+	
 });

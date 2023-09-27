@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import rootReducer from "./root";
 import printerReducer from "./printer";
+import productReducer from "./products";
 
 const store = configureStore({
 	reducer: {
 		root: rootReducer,
-		printer: printerReducer
+		printer: printerReducer,
+		products: productReducer,
 	},
 });
 
