@@ -16,6 +16,7 @@ import { MainButtonBar } from "./MainButtonBar";
 import { useSelector } from "react-redux";
 import { selectGroupById, selectVariants } from "../../../../store/products";
 import { ProgressBar } from "../../../../components/progress_bar/ProgressBar";
+import { OrderSummary } from "./OrderSummary";
 
 export const ProductDetails = (props: { productId: string }) => {
 	const product = useSelector(selectGroupById(props.productId));
@@ -35,6 +36,8 @@ export const ProductDetails = (props: { productId: string }) => {
 					</StyledLink>
 				</Breadcrumbs>
 			</StyledRow>
+			{!props.productId && <StyledColumn>Nothing to see here</StyledColumn> }
+			
 			<StyledContainer data-variant={"fade-up"} key={props.productId}>
 				<StyledImage src="./images/placeholder.png" alt="product" />
 				<Typography variant="h5" component={"h1"} fontWeight={"bold"}>
@@ -84,11 +87,11 @@ const ProductSpecs = ({ variantId }: { variantId: string }) => {
 		setProgress(
 			Array(5)
 				.fill(0)
-				.map((_, i) => Math.floor(Math.random() * 150))
+				.map((_, i) => Math.floor(Math.random() * 100))
 		);
 	}, [variantId]);
 	return (
-		<SpecColumn>
+		<SpecColumn id="spec-column">
 			<SpecRow>
 				<StyledTitleBox>
 					<Typography variant="caption" component={"h6"} fontWeight={"bold"}>
@@ -107,13 +110,21 @@ const ProductSpecs = ({ variantId }: { variantId: string }) => {
 				</StyledTitleBox>
 				<Divider orientation="vertical" flexItem />
 				<ValuesColumn>
-					{progress.map((p, i) => (
-						<Box key={i} style={{width: "100%"}}>
-							<Typography>OrderID</Typography>
-							<ProgressBar key={i} progress={p} />
-							<Typography variant="overline">{`${p > 100 ? 100 : p} %`}</Typography>
-						</Box>
-					))}
+					{progress.map((p, i) => {
+						const unitCountOrdered = Math.floor(Math.random() * 100 + 10);
+						const unitCountPicked = Math.floor(Math.random() * unitCountOrdered);
+						return <OrderSummary
+							key={`${i}-${variantId}`}
+							orderId={`order-${i}`}
+							status={["queued", "paused", "picking", "packing", "shipping", "delivered", "cancelled"][Math.floor(Math.random() * 7)] as any}
+							createdOn={new Date().toISOString()}
+							customerId={"customer-1"}
+							customerName={"John Doe"}
+							unitCountOrdered={unitCountOrdered}
+							unitCountPicked={unitCountPicked}
+						/>
+					}
+					)}
 				</ValuesColumn>
 			</SpecRow>
 		</SpecColumn>
@@ -129,7 +140,7 @@ const ValuesColumn = styled(Box)({
 	flexDirection: "column",
 	alignItems: "flex-start",
 	flex: 1,
-	gap: "0.5rem",
+	// gap: "0.5rem",
 	width: "100%"
 });
 
@@ -139,7 +150,7 @@ const SpecRow = styled(Box)({
 	justifyContent: "space-between",
 	alignItems: "flex-start",
 	width: "100%",
-	marginBottom: "1rem",
+	// marginBottom: "1rem",
 	gap: "1rem",
 });
 
@@ -152,7 +163,6 @@ const SpecColumn = styled(Box)(({ theme }) => ({
 	marginBottom: "1rem",
 	backgroundColor: theme.palette.background.paper,
 	padding: "1rem",
-	height: "100%"
 }));
 
 const StyledRow = styled(Box)({

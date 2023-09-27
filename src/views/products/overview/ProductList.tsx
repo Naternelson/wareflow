@@ -1,4 +1,4 @@
-import { Box, BoxProps, Checkbox, List, ListItemButton, Typography, styled } from "@mui/material";
+import { Box, BoxProps, Checkbox, List, ListItemButton, Typography, alpha, styled } from "@mui/material";
 
 export interface ProductItem {
 	name: string;
@@ -12,19 +12,31 @@ export interface ProductListProps {
 	items: ProductItem[];
 	selected: string[];
 	onSelect: (id: string) => void;
+	onFocus: (id: string) => void;
+	focus: string | null;
 }
 
-export const ProductList = ({ items, selected, onSelect }: ProductListProps) => {
+export const ProductList = ({ items, selected, onSelect, onFocus, focus }: ProductListProps) => {
 	return (
 		<StyledList>
 			{items.map((item) => {
 				const isSelected = selected.includes(item.productId);
 				return (
 					<StyledListItemButton
+						id={item.productId}
 						key={item.productId}
-						selected={isSelected}
-						onClick={() => onSelect(item.productId)}>
-						<Checkbox size="small" checked={isSelected} />
+						selected={isSelected || focus === item.productId}
+						onClick={() => onFocus(item.productId)}
+						focus={focus === item.productId}>
+						<Checkbox
+							onMouseDown={(e) => e.stopPropagation()}
+							size="small"
+							checked={isSelected}
+							onClick={(e) => {
+								e.stopPropagation();
+								onSelect(item.productId);
+							}}
+						/>
 						<StyledColumn grow={true} align="left">
 							<Typography variant="body1" component={"h3"} fontWeight={"bold"}>
 								{item.name}
@@ -33,7 +45,7 @@ export const ProductList = ({ items, selected, onSelect }: ProductListProps) => 
 							<Typography variant="caption">{`${item.variations} Variations`}</Typography>
 						</StyledColumn>
 						<StyledColumn align={"right"}>
-							<Typography variant="body1" fontWeight={"bold"} >
+							<Typography variant="body1" fontWeight={"bold"}>
 								{item.customerName}
 							</Typography>
 							<Typography variant="caption">{item.customerId}</Typography>
@@ -45,8 +57,9 @@ export const ProductList = ({ items, selected, onSelect }: ProductListProps) => 
 	);
 };
 
-
-const StyledColumn = styled(({ grow, align, ...otherProps }: {grow?: boolean, align?: "left" | "right"} & BoxProps) => <Box {...otherProps} />)<{
+const StyledColumn = styled(
+	({ grow, align, ...otherProps }: { grow?: boolean; align?: "left" | "right" } & BoxProps) => <Box {...otherProps} />
+)<{
 	grow?: boolean;
 	align?: "left" | "right";
 }>(({ grow, align }) => ({
@@ -54,21 +67,21 @@ const StyledColumn = styled(({ grow, align, ...otherProps }: {grow?: boolean, al
 	flexDirection: "column",
 	alignItems: align === "right" ? "flex-end" : "flex-start",
 	flex: grow ? 1 : "unset",
-    
 }));
 
-const StyledListItemButton = styled(ListItemButton)(({theme})=> ({
-	gap: "0.25rem",
-    backgroundColor: theme.palette.background.default,
+const StyledListItemButton = styled(ListItemButton)<{ focus?: boolean }>(({ theme, selected }) => ({
+	"&&&": {
+		gap: "0.25rem",
+		backgroundColor: selected ? alpha(theme.palette.primary.light, 0.5) : theme.palette.background.default,
+	},
 }));
 
 const StyledList = styled(List)({
 	overflowY: "auto",
 	overflowX: "hidden",
-    backgroundColor: "white",
-    padding: "1rem",
-    gap: "2px",
-    display: "flex",
-    flexDirection: "column",
-	
+	backgroundColor: "white",
+	padding: "1rem",
+	gap: "2px",
+	display: "flex",
+	flexDirection: "column",
 });

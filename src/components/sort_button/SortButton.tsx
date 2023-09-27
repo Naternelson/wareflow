@@ -16,7 +16,7 @@ export const SortButton = (props: SortButtonProps) => {
     const label = options.find(o => o.value === value)?.label || ""
 	return (
 		<>
-			<StyledButton ref={ref} onClick={() => setOpen(true)}>
+			<StyledButton ref={ref} onClick={() => setOpen(true)} className="p-3">
 				{icon !== false && <Sort fontSize="small" />}
 				<Typography variant="body2">{label}</Typography>
 			</StyledButton>
@@ -52,6 +52,7 @@ const StyledButton = styled(ButtonBase)(({ theme }) => ({
 	backgroundColor: theme.palette.common.white,
 	padding: ".25rem 1rem",
     width: "fit-content",
+	boxShadow: theme.shadows[2],
 }));
 
 const MenuItemStyled = styled(MenuItem)(({ theme }) => ({

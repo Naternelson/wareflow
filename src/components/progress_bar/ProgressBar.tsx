@@ -1,11 +1,16 @@
 import { Box, styled } from "@mui/material";
+import { useEffect, useState } from "react";
 
 interface ProgressBarProps {
-	progress: number;
+	value: number;
 }
 
-export const ProgressBar = ({ progress }: ProgressBarProps) => {
-	return <StyledProgressBar data-progress={progress} />;
+export const ProgressBar = ({ value }: ProgressBarProps) => {
+	const [progressValue, setProgressValue] = useState(0);
+	useEffect(() => {
+		setProgressValue(value);
+	},[value])
+	return <StyledProgressBar data-progress={progressValue} />;
 };
 interface ProgressBarStyleProps {
 	"data-progress": number;
@@ -31,7 +36,7 @@ const StyledProgressBar = styled(Box)<ProgressBarStyleProps>(({ theme, "data-pro
 			width: `${progress}%`,
 			backgroundColor: theme.palette.success.main,
 			borderRadius: "8px",
-			transition: "width 1.5s cubic-bezier(0.16, 1, 0.3, 1)",
+			transition: "width 1.5s cubic-bezier(0.16, 1, 0.3, 1)", // smooth transition
 		},
 	};
 });

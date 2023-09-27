@@ -6,19 +6,25 @@ import { ProductDetails } from "./details/ProductDetails";
 import { productItems } from "./mockdata";
 
 const ProductOverviewView = () => {
+	const [focus, setFocus] = useState<string | null>(null);
 	const [selected, setSelected] = useState<string[]>([]);
 	const onSelect = (id: string) => {
 		selected.includes(id) ? setSelected(selected.filter((s) => s !== id)) : setSelected([...selected, id]);
 	};
+	const onFocus = (id: string) => {
+		setFocus(id);
+	}
 	return (
 		<StyledContainer>
 			<StyledRow>
 				<StyledColumn style={{maxWidth: "500px"}}>
 					<ProductHeader />
-					<ProductList items={productItems} selected={selected} onSelect={onSelect} />
+					<ProductList focus={focus} items={productItems} selected={selected} onSelect={onSelect} onFocus={onFocus}/>
 				</StyledColumn>
 				<StyledColumn style={{maxWidth: "800px"}}>
-					<ProductDetails productId={selected[0] || ""} />
+
+					{!!focus && <ProductDetails productId={focus || ""} />}
+					{!focus && <Box style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100%"}}>Nothing to see here</Box>}
 				</StyledColumn>
 			</StyledRow>
 		</StyledContainer>
